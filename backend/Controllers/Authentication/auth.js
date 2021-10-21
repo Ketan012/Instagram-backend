@@ -72,15 +72,15 @@ exports.verificationCode = (req, res) => {
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'ketan.jadhav@successive.tech',
-            pass: 'Ketan@012'
+            user: 'officialinstagramhandler@gmail.com',
+            pass: 'Instagram@012'
         }
     });
 
     const OTP = Helper.generateRandomNumber();
 
     var mailOptions = {
-        from: 'ketan.jadhav@successive.tech',
+        from: 'officialinstagramhandler@gmail.com',
         to: email,
         subject: 'Instagram Verification Code',
         // text: <b>'That was easy!'</b>
