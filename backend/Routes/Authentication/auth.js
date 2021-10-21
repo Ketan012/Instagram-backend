@@ -18,7 +18,7 @@ route.post('/signup', [
 
 route.get('/login', login);
 
-route.get('/verificationcode', verificationCode);
+route.get('/verificationcode/:email', verificationCode);
 
 route.get('/verifyemail', verifyEmail);
 
