@@ -1,5 +1,5 @@
 const moment = require('moment');
-export class Helper{
+class Helper{
     
     toLowerCase(str){
         return str.toLowerCase();        
@@ -26,3 +26,5 @@ export class Helper{
     }
 
 }
+
+module.exports = new Helper();
