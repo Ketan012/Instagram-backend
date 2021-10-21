@@ -5,7 +5,7 @@ const controllers = require('./../../Controllers');
 
 //auth controllers
 const { authControllers } = controllers;
-const { signup, login, verificationCode, verifyEmail, resetPasswordLink } = authControllers
+const { signup, login, verificationCode, verifyEmail, resetPasswordLink } = authControllers;
 
 route.post('/signup', signup);
 
