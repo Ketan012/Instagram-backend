@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 const crypto = require("crypto");
 // const uuidv1 = require("uuid/v1");
 
-const userSchema = mongoose.Schema({
+var userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -48,20 +48,20 @@ const userSchema = mongoose.Schema({
 
 userSchema
     .virtual('password')
-    .set((password) => {
+    .set(function(password){
         let count = 1;
         this._password = password;
         this.salt = count;
         this.encrypted_password = this.securePassword(password);
         count ++;
     })
-    .get(() => this._password);
+    .get(function() { this._password});
 
 userSchema.methods = {
     authenticate: () => {
         return this.securePassword(plainpassword) === this.encrypted_password;
     },
-    securePassword: (plainpassword) => {
+    securePassword: function (plainpassword) {
         if (!plainpassword) return "";
         try {
             return crypto
@@ -72,7 +72,7 @@ userSchema.methods = {
             return "";
         }
     }
-}
+};
 
 
 module.exports = mongoose.model("User", userSchema);
