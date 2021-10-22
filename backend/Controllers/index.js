@@ -1,6 +1,6 @@
-const { login, signup, verificationCode, verifyEmail, resetPasswordLink} = require('./Authentication/auth');
+const { login, signup, sendEmail, verificationCodeByPhone, verifyEmail, resetPasswordLink} = require('./Authentication/auth');
 const  authControllers = {
-    login, signup, verificationCode, verifyEmail, resetPasswordLink
+    login, signup, sendEmail, verificationCodeByPhone, verifyEmail, resetPasswordLink
 };
 const controllers = {
    authControllers

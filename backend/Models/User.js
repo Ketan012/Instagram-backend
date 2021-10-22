@@ -58,7 +58,7 @@ userSchema
     .get(function() { this._password});
 
 userSchema.methods = {
-    authenticate: () => {
+    authenticate: function (plainpassword) {
         return this.securePassword(plainpassword) === this.encrypted_password;
     },
     securePassword: function (plainpassword) {

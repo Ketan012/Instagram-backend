@@ -6,7 +6,7 @@ const controllers = require('./../../Controllers');
 
 //auth controllers
 const { authControllers } = controllers;
-const { signup, login, verificationCode, verifyEmail, resetPasswordLink } = authControllers;
+const { signup, login, sendEmail, verificationCodeByPhone, verifyEmail, resetPasswordLink } = authControllers;
 
 route.post('/signup', [
     check('username', 'username should be at least 3 characters long.').isLength({min: 3}),
@@ -16,13 +16,13 @@ route.post('/signup', [
     
 ], signup);
 
-route.get('/login', login);
+route.post('/login', login);
 
-route.get('/verificationcode/:email', verificationCode);
+route.get('/sendmail/email/:isReset/:email', sendEmail);
 
-route.get('/verifyemail', verifyEmail);
+route.get('/verificationcode/phone/:phone', verificationCodeByPhone);
 
-route.get('/resetpasswordlink', resetPasswordLink);
+route.get('/verifyemail/:email', verifyEmail);
 
 //TODO: move to user route
 // route.put('/updatepassword', updatePassword);
