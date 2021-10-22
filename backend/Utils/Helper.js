@@ -1,4 +1,5 @@
 const moment = require('moment');
+const constants = require('./Constants');
 class Helper{
     
     toLowerCase(str){
@@ -25,6 +26,9 @@ class Helper{
         return Math.floor(100000 + Math.random() * 900000);
     }
 
+    isValidEmail(email){
+        return constants.isValidEmail.test(email);
+    }
 }
 
 module.exports = new Helper();
