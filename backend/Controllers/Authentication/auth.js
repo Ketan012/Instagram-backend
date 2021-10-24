@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(422).json({
+        return res.json({
             error: errors.array()[0].msg
         })
     }
@@ -26,7 +26,7 @@ exports.signup = (req, res) => {
 
     User.findOne({ username }, (err, user) => {
         if (user) {
-            return res.status(400).json({
+            return res.json({
                 data: null,
                 status: 'error',
                 error: 'username is already exists!'
@@ -35,7 +35,7 @@ exports.signup = (req, res) => {
 
         User.findOne({ email }, (err, user) => {
             if (user) {
-                return res.status(400).json({
+                return res.json({
                     data: null,
                     status: 'error',
                     error: 'email is already exists!'
@@ -45,10 +45,10 @@ exports.signup = (req, res) => {
             const newUser = new User(req.body);
             newUser.save((err, user) => {
                 if (err) {
-                    return res.status(400).json({
+                    return res.json({
                         data: null,
                         status: 'error',
-                        error: err
+                        error: 'User is not able to store in DB'
                     })
                 }
                 return res.json({
@@ -78,7 +78,7 @@ exports.sendEmail = (req, res) => {
         readHTMLFile(__dirname + '/./../../views/email/resetLinkTemplate.html', function (err, html) {
 
             if (err) {
-                return res.status(400).json({
+                return res.json({
                     data: null,
                     status: 'error',
                     error: err
@@ -92,13 +92,13 @@ exports.sendEmail = (req, res) => {
             };
 
             if (!Boolean(sendMail(transporter, mailOptions))) {
-                return res.status(400).json({
+                return res.json({
                     data: null,
                     status: 'error',
                     error: 'Mail sent failed!'
                 })
             }
-            return res.status(200).json({
+            return res.json({
                 data: 'Mail sent successfully!',
                 status: 'success',
                 error: null
@@ -111,7 +111,7 @@ exports.sendEmail = (req, res) => {
         Subject = 'Instagram Verification Code';
         readHTMLFile(__dirname + '/./../../views/email/verificationCodeTemplate.html', function (err, html) {
             if (err) {
-                return res.status(400).json({
+                return res.json({
                     data: null,
                     status: 'error',
                     error: err
@@ -131,13 +131,13 @@ exports.sendEmail = (req, res) => {
             };
 
             if (!Boolean(sendMail(transporter, mailOptions))) {
-                return res.status(400).json({
+                return res.json({
                     data: null,
                     status: 'error',
                     error: 'Mail sent failed!'
                 })
             }
-            return res.status(200).json({
+            return res.json({
                 data: 'Mail sent successfully!',
                 status: 'success',
                 error: null
@@ -154,20 +154,20 @@ exports.verificationCodeByPhone = (req, res) => {
 
     vonage.message.sendSms(from, to, text, (err, responseData) => {
         if (err) {
-            return res.status(400).json({
+            return res.json({
                 data: null,
                 status: 'error',
                 error: err
             })
         } else {
             if (responseData.messages[0]['status'] === "0") {
-                return res.status(200).json({
+                return res.json({
                     data: 'Message sent successfully!',
                     status: 'success',
                     error: null
                 })
             } else {
-                return res.status(400).json({
+                return res.json({
                     data: null,
                     status: 'error',
                     error: `Message failed with error: ${responseData.messages[0]['error-text']}`
@@ -186,7 +186,7 @@ exports.login = (req, res) => {
     const query = isEmail ? { 'email': username } : { 'username': username };
     User.findOne(query, (err, user) => {
         if (err || !user) {
-            return res.status(404).json({
+            return res.json({
                 data: null,
                 status: 'error',
                 error: 'User not found.'
@@ -194,7 +194,7 @@ exports.login = (req, res) => {
         }
 
         if (!user.authenticate(password)) {
-            return res.status(401).json({
+            return res.json({
                 data: null,
                 status: 'error',
                 error: 'username and password do not match'
@@ -203,7 +203,7 @@ exports.login = (req, res) => {
 
         const token = jwt.sign({ _id: user._id, email: user.email, username: user.username }, 'SECRET');
 
-        return res.status(200).json({
+        return res.json({
             data: token,
             status: 'success',
             error: null
@@ -223,13 +223,13 @@ exports.verifyEmail = (req, res) => {
     console.log("email: ", req.params.email);
     User.findOne(query, (err, users) => {
         if (err || !users) {
-            return res.status(404).json({
+            return res.json({
                 data: false,
                 status: 'error',
                 error: 'User not found.'
             })
         }
-        return res.status(200).json({
+        return res.json({
             data: true,
             status: 'success',
             error: null
