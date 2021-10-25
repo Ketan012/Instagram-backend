@@ -6,7 +6,7 @@ const controllers = require('./../../Controllers');
 
 //auth controllers
 const { authControllers } = controllers;
-const { signup, login, sendEmail, verificationCodeByPhone, verifyEmail, resetPasswordLink } = authControllers;
+const { signup, login, sendEmail, verificationCodeByPhone, verifyEmail } = authControllers;
 
 route.post('/signup', [
     check('username', 'username should be at least 3 characters long.').isLength({min: 3}),
