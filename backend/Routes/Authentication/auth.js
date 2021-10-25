@@ -11,6 +11,8 @@ const { signup, login, sendEmail, verificationCodeByPhone, verifyEmail, resetPas
 route.post('/signup', [
     check('username', 'username should be at least 3 characters long.').isLength({min: 3}),
     check('username', 'username should be maximum 15 characters long.').isLength({max: 15}),
+    check('displayname', 'displayname should be at least 3 characters long.').isLength({min: 3}),
+    check('displayname', 'displayname should be maximum 15 characters long.').isLength({max: 15}),
     check('email', 'email is required.').isEmail(),
     check('password', 'password should be at least 6 characters long.').isLength({min: 6}),
     

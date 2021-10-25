@@ -48,14 +48,11 @@ exports.signup = (req, res) => {
                     return res.json({
                         data: null,
                         status: 'error',
-                        error: 'User is not able to store in DB'
+                        error: 'User is not able to store in DB!'
                     })
                 }
                 return res.json({
-                    data: {
-                        username: user.username,
-                        email: user.email
-                    },
+                    data: 'user created successfully!',
                     status: 'success',
                     error: null
                 })
@@ -197,7 +194,7 @@ exports.login = (req, res) => {
             return res.json({
                 data: null,
                 status: 'error',
-                error: 'username and password do not match'
+                error: 'Username and password do not match'
             })
         }
 
@@ -219,8 +216,6 @@ exports.verifyEmail = (req, res) => {
 
     const query = isEmail ? { 'email': String(req.params.email) } : { 'username': String(req.params.email) };
 
-    console.log("isEmail: ", isEmail);
-    console.log("email: ", req.params.email);
     User.findOne(query, (err, users) => {
         if (err || !users) {
             return res.json({
