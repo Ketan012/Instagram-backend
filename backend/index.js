@@ -19,6 +19,7 @@ mongoose.connect(process.env.DB, {
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/api/v1/auth', route.authRoute);
+app.use('/api/v1/user', route.userRoute);
 app.listen(process.env.PORT, ()=>{
     console.log(`App is running on port ${process.env.PORT}`);
 })
