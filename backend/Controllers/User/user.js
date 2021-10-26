@@ -1,5 +1,19 @@
 const User = require('./../../Models/User');
 
+exports.getUserById = (req, res, next, id) => {
+    User.findById(id).exec((err, user)=>{
+        if(err){
+            return res.json({
+                data: null,
+                status: 'error',
+                error: 'No user found in database.'
+            });
+        }
+        req.profile = user;
+        next();
+    })
+}
+
 exports.getAllUser = (req, res) => {
     User.find().exec((err, users)=>{
         if(err){
