@@ -14,6 +14,14 @@ exports.getUserById = (req, res, next, id) => {
     })
 }
 
+exports.getUserData = (req, res) => {
+    return res.json({
+        data: req.profile,
+        status: 'success',
+        error: null
+    })
+}
+
 exports.getAllUser = (req, res) => {
     User.find().exec((err, users)=>{
         if(err){
