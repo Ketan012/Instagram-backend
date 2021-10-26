@@ -5,16 +5,17 @@ const { check } = require('express-validator');
 const controllers = require('../../Controllers');
 
 //auth controllers
-const { userControllers } = controllers;
-const { createUser, getAllUser, getUserById, updateUser, getUserProfile, updateUserProfile, removeProfilePhoto } = userControllers;
+const { userControllers, authControllers } = controllers;
+const { createUser, getAllUser, getUserById, getUserData, updateUser, getUserProfile, updateUserProfile, removeProfilePhoto } = userControllers;
 
-route.get('/', getAllUser);
+route.param('id', getUserById);
 
+route.get('/users', getAllUser);
+
+route.get('/:id', getUserData);
 //TODO: to create controllers
 
 // route.post('/', createUser);
-
-// route.params('/:id', getUserById);
 
 // route.put('/:id', updateUser);
 
