@@ -1,6 +1,7 @@
 const User = require('./../../Models/User');
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
+const expressJwt = require('express-jwt');
 const Helper = require('./../../Utils/Helper');
 const Vonage = require('@vonage/server-sdk')
 const { GmailTransport, sendMail, readHTMLFile } = require('./../../config/email');
@@ -201,7 +202,10 @@ exports.login = (req, res) => {
         const token = jwt.sign({ _id: user._id, email: user.email, username: user.username }, 'SECRET');
 
         return res.json({
-            data: token,
+            data: {
+                _id: user._id,
+                token: token
+            },
             status: 'success',
             error: null
         })
@@ -231,3 +235,24 @@ exports.verifyEmail = (req, res) => {
         })
     })
 }
+
+
+// TODO: will come here later 
+//Middleware
+// exports.isLoggedin = expressJwt({
+//     secret : 'SECRET',
+//     userProperty: 'auth',
+//     algorithms: ['HS256'],
+//     credentialsRequired: false
+// })
+
+// exports.isAuthenticated = (req, res, next) => {
+//     // let checker = req.profile && req.auth && req.profile.id === req.auth._id;
+//     let checker = req.profile;
+//     if(!checker){
+//         return res.json({
+//             error: 'Access Denied!'
+//         })
+//     }
+//     next();
+// }
