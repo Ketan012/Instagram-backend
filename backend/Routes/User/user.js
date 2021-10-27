@@ -1,14 +1,17 @@
 const express = require('express');
 const route = express.Router();
 
-const { check } = require('express-validator');
 const controllers = require('../../Controllers');
 
-//auth controllers
-const { userControllers } = controllers;
-const { createUser, getAllUser, getUserById, updateUser, getUserProfile, updateUserProfile, removeProfilePhoto } = userControllers;
+const upload = require('../../Middleware/Upload');
 
-route.get('/', getAllUser);
+const UserProfile = require('../../Models/UserProfile');
+//auth controllers
+const { userControllers, userProfileControllers } = controllers;
+const { createUser, getAllUser, getUserById, updateUser, removeProfilePhoto } = userControllers;
+const { updateUserProfile, getUserProfile, deleteUserProfile, deleteAll } = userProfileControllers;
+
+route.get('/users', getAllUser);
 
 //TODO: to create controllers
 
@@ -18,10 +21,11 @@ route.get('/', getAllUser);
 
 // route.put('/:id', updateUser);
 
-// route.get('/:id', getUserProfile);
+route.get('/userprofile', getUserProfile);
 
-// route.put('/:id', updateUserProfile);
+route.post('/userprofile/:id', upload.single('image') ,updateUserProfile);
 
-// route.delete('/:id', removeProfilePhoto);
+route.delete('/userprofile/:id', deleteUserProfile);
 
+route.delete('/deleteAll', deleteAll);
 module.exports = route;

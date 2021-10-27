@@ -18,6 +18,9 @@ mongoose.connect(process.env.DB, {
 
 app.use(bodyParser.json());
 app.use(cors());
+
+app.set("view engine", "ejs");
+
 app.use('/api/v1/auth', route.authRoute);
 app.use('/api/v1/user', route.userRoute);
 app.listen(process.env.PORT, ()=>{
