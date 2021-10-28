@@ -1,4 +1,4 @@
-const { login, signup, sendEmail, verificationCodeByPhone, verifyEmail } = require('./Authentication/auth');
+const { login, signup, sendEmail, verificationCodeByPhone, verifyEmail, isLoggedin, isAuthenticated } = require('./Authentication/auth');
 
 const { updateUserProfile, getUserProfile, deleteUserProfile, deleteAll } = require('./User/userProfile');
 
@@ -6,7 +6,7 @@ const { getAllUser, getUserById, getUserData } = require('./User/user');
 
 
 const  authControllers = {
-    login, signup, sendEmail, verificationCodeByPhone, verifyEmail,
+    login, signup, sendEmail, verificationCodeByPhone, verifyEmail, isAuthenticated, isLoggedin
 };
 
 const userControllers = {
