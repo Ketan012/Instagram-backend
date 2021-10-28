@@ -13,7 +13,8 @@ const { updateUserProfile, getUserProfile, deleteUserProfile, deleteAll } = user
 
 route.get('/users', getAllUser);
 
-//TODO: to create controllers
+
+//TODO: to create user controllers
 
 // route.post('/', createUser);
 
