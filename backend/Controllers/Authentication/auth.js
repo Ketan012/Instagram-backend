@@ -239,20 +239,18 @@ exports.verifyEmail = (req, res) => {
 
 // TODO: will come here later 
 //Middleware
-// exports.isLoggedin = expressJwt({
-//     secret : 'SECRET',
-//     userProperty: 'auth',
-//     algorithms: ['HS256'],
-//     credentialsRequired: false
-// })
+exports.isLoggedin = expressJwt({
+    secret : 'SECRET',
+    userProperty: 'auth',
+    algorithms: ['HS256'],
+})
 
-// exports.isAuthenticated = (req, res, next) => {
-//     // let checker = req.profile && req.auth && req.profile.id === req.auth._id;
-//     let checker = req.profile;
-//     if(!checker){
-//         return res.json({
-//             error: 'Access Denied!'
-//         })
-//     }
-//     next();
-// }
+exports.isAuthenticated = (req, res, next) => {
+    let checker = req.profile && req.auth && req.profile.id === req.auth._id;
+    if(!checker){
+        return res.json({
+            error: 'Access Denied!'
+        })
+    }
+    next();
+}
