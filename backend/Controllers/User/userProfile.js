@@ -5,14 +5,11 @@ const UserProfile = require('../../Models/UserProfile');
 
 exports.updateUserProfile = (req, res, next) => {
     const obj = {
-        name: req.body.name,
-        desc: req.body.desc,
         userId: req.params.id,
-        img: {
-            data: fs.readFileSync(path.join(__dirname + '/./../../Assets/uploads/' + req.file.filename)),
+        profile: {
+            buffer: 'data:image/jpeg;base64,' + req.file.buffer.toString('base64'),
             contentType: 'image/JPG'
         },
-        path: __dirname + '/./../../Assets/uploads/' + req.file.filename,
     }
 
     UserProfile.create(obj, (err, image)=>{
@@ -24,7 +21,7 @@ exports.updateUserProfile = (req, res, next) => {
             })
         }
         return res.json({
-            data: 'Profile saved successfully.',
+            data: image,
             status: 'success',
             error: null
         })

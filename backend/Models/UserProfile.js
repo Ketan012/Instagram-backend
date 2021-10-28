@@ -6,10 +6,9 @@ var userProfileSchema = new mongoose.Schema({
         ref: 'User'
     },
     profile: {
-        data: Buffer,
+        buffer: String,
         contentType: String
     },
-    path: String
 }, { timestamps: true }
 );
 
