@@ -24,13 +24,13 @@ route.param('id', getUserById);
 
 // route.put('/:id', updateUser);
 
-route.get('/userdataprofile', getUserProfile);
+route.get('/userprofile/:id', isLoggedin, getUserProfile);
 
 route.get('/:id', getUserData);
 
-route.post('/userprofile/:id', upload.single('image') ,updateUserProfile);
+route.post('/userprofile/:id' ,isLoggedin, isAuthenticated, upload.single('image') ,updateUserProfile);
 
-route.delete('/userprofile/:id', deleteUserProfile);
+route.delete('/userprofile/:id', isLoggedin, isAuthenticated, deleteUserProfile);
 
 route.delete('/deleteAll', deleteAll);
 module.exports = route;
