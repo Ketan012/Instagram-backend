@@ -4,6 +4,7 @@ const { updateUserProfile, getUserProfile, deleteUserProfile, deleteAll } = requ
 
 const { getAllUser, getUserById, getUserData } = require('./User/user');
 
+const { userFollowing } = require('./User/userFollowing');
 
 const  authControllers = {
     login, signup, sendEmail, verificationCodeByPhone, verifyEmail, isAuthenticated, isLoggedin
@@ -18,10 +19,15 @@ const userProfileControllers = {
     updateUserProfile, getUserProfile, deleteUserProfile, deleteAll
 }
 
+const userFollowingControllers = {
+    userFollowing
+}
+
 const controllers = {
    authControllers,
    userControllers,
-   userProfileControllers
+   userProfileControllers,
+   userFollowingControllers
 }
 
 module.exports = controllers;
