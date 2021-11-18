@@ -67,11 +67,11 @@ exports.signup = (req, res) => {
 exports.sendEmail = (req, res) => {
 
     const email = req.params.email;
-    const isReset = Number(req.params.isReset);
+    const isReset =req.params.isReset;
     let Subject = '';
     var transporter = GmailTransport;
 
-    if (isReset === 1) {
+    if (isReset) {
         Subject = 'Rest Password Link'
         readHTMLFile(__dirname + '/./../../views/email/resetLinkTemplate.html', function (err, html) {
 
