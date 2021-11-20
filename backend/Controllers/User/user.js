@@ -1,5 +1,6 @@
 const User = require('./../../Models/User');
 const UserFollowers = require('./../../Models/UserFollowers');
+const UserFollowing = require('./../../Models/UserFollowing');
 var ObjectID = require("mongodb").ObjectID;
 
 exports.getUserById = (req, res, next, id) => {
@@ -98,7 +99,7 @@ exports.userFollowers = (req, res) => {
               return res.json({
                   data: null,
                   status: "error",
-                  error: "this user already following you."
+                  error: "this user is already following you."
               })
           }
 
@@ -138,5 +139,86 @@ exports.userFollowers = (req, res) => {
             })
         })
     })
-    return ;
+}
+
+exports.getFollowings = (req, res) => {
+    const { userId } = req.body;
+
+    if(!userId){
+        return res.json({
+            data: null,
+            status: "error",
+            error: "UserId is required."
+        })
+    }
+
+    if(!ObjectID.isValid(userId)){
+        return res.json({
+            data: null,
+            status: "error",
+            error: "UserId is invalid."
+        })
+    }
+
+    UserFollowing.find({ userId: userId}, (err, followings)=>{
+        if(err){
+            return res.json({
+                data: null,
+                status: "error",
+                error: "there is error while fetching user followings."
+            })
+        }
+
+        if(followings){
+            return res.json({
+                data: {
+                    data: followings,
+                    count: followings.length
+                },
+                status: "success",
+                error: null
+            })
+        }
+    })
+}
+
+exports.getFollowers = (req, res) => {
+    const { userId } = req.body;
+
+    if(!userId){
+        return res.json({
+            data: null,
+            status: "error",
+            error: "UserId is required."
+        })
+    }
+
+    if(!ObjectID.isValid(userId)){
+        return res.json({
+            data: null,
+            status: "error",
+            error: "UserId is invalid."
+        })
+    }
+
+    UserFollowers.find({ userId: userId }, (err, followers)=>{
+        if(err){
+            return res.json({
+                data: null,
+                status: "error",
+                error: "there is error while fetching user followers."
+            })
+        }
+
+        if(followers){
+            return res.json({
+                data: {
+                    data: followers,
+                    count: followers.length
+                },
+                status: "success",
+                error: null
+            })
+        }
+    })
 }

@@ -10,21 +10,14 @@ const UserProfile = require('../../Models/UserProfile');
 
 const { userControllers, userProfileControllers, authControllers, userFollowingControllers } = controllers;
 const { isAuthenticated, isLoggedin } = authControllers;
-const { createUser, getAllUser, getUserById, updateUser, removeProfilePhoto, getUserData, userFollowers } = userControllers;
+const { createUser, getAllUser, getUserById, updateUser, removeProfilePhoto, getUserData, userFollowers, getFollowings, getFollowers } = userControllers;
 const { updateUserProfile, getUserProfile, deleteUserProfile, deleteAll } = userProfileControllers;
 const { userFollowing } = userFollowingControllers;
 
 
 route.get('/users/:id', isLoggedin, isAuthenticated, getAllUser);
 
-//TODO: to create user controllers
 route.param('id', getUserById);
-
-//TODO: to create controllers
-
-// route.post('/', createUser);
-
-// route.put('/:id', updateUser);
 
 route.get('/userprofile/:id', isLoggedin, getUserProfile);
 
@@ -38,5 +31,10 @@ route.post('/userFollowers/:id', isLoggedin, isAuthenticated, userFollowers);
 
 route.delete('/userprofile/:id', isLoggedin, isAuthenticated, deleteUserProfile);
 
+route.get('/following/:id', isLoggedin, isAuthenticated, getFollowings);
+
+route.get('/follower/:id', isLoggedin, isAuthenticated, getFollowers);
+
 route.delete('/deleteAll', deleteAll);
+
 module.exports = route;
