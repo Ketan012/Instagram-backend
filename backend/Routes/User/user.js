@@ -31,9 +31,9 @@ route.post('/userFollowers/:id', isLoggedin, isAuthenticated, userFollowers);
 
 route.delete('/userprofile/:id', isLoggedin, isAuthenticated, deleteUserProfile);
 
-route.get('/following/:id', isLoggedin, isAuthenticated, getFollowings);
+route.get('/following/:id/:userId', isLoggedin, isAuthenticated, getFollowings);
 
-route.get('/follower/:id', isLoggedin, isAuthenticated, getFollowers);
+route.get('/follower/:id/:userId', isLoggedin, isAuthenticated, getFollowers);
 
 route.delete('/deleteAll', deleteAll);
 

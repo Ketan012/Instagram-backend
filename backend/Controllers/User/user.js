@@ -142,7 +142,7 @@ exports.userFollowers = (req, res) => {
 }
 
 exports.getFollowings = (req, res) => {
-    const { userId } = req.body;
+    const userId = req.params.userId;
 
     if(!userId){
         return res.json({
@@ -183,7 +183,7 @@ exports.getFollowings = (req, res) => {
 }
 
 exports.getFollowers = (req, res) => {
-    const { userId } = req.body;
+    const userId = req.params.userId;
 
     if(!userId){
         return res.json({
