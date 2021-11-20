@@ -85,7 +85,7 @@ exports.userFollowers = (req, res) => {
       }
 
       const newFollower = new UserFollowers(req.body);
-      UserFollowers.findOne(req.body, (err, userData) => {
+      UserFollowers.findOne({userId: userId, follower_id: follower_id}, (err, userData) => {
           if(err){
               return res.json({
                   data: null,

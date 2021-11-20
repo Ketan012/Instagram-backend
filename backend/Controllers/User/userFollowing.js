@@ -47,7 +47,7 @@ exports.userFollowing = (req, res) => {
   }
 
   const newFollowing = new UserFollowing(req.body);
-  UserFollowing.findOne(req.body, (err, userData) => {
+  UserFollowing.findOne({userId: userId, following_id: following_id}, (err, userData) => {
     if (err) {
       return res.json({
         data: null,
