@@ -38,12 +38,12 @@ exports.userFollowing = (req, res) => {
     });
   }
 
-  if(userId === following_id){
+  if (userId === following_id) {
     return res.json({
       data: null,
       status: "error",
       error: "You cannot follow userself.",
-    })
+    });
   }
 
   const newFollowing = new UserFollowing(req.body);
@@ -52,7 +52,7 @@ exports.userFollowing = (req, res) => {
       return res.json({
         data: null,
         status: "error",
-        error: "Not able to find user.",
+        error: "Not able to find a user.",
       });
     }
     if (userData) {
@@ -62,12 +62,13 @@ exports.userFollowing = (req, res) => {
         error: null,
       });
     }
-    newFollowing.save((err, user) => {
-      if (err) {
+
+    User.findOne({ _id: userId }, (err, user) => {
+      if (err || !user) {
         return res.json({
           data: null,
           status: "error",
-          error: "Faceing error while following user.",
+          error: "User not found in database.",
         });
       }
 
@@ -76,13 +77,23 @@ exports.userFollowing = (req, res) => {
           return res.json({
             data: null,
             status: "error",
-            error: "Unable to find user.",
+            error: "Unable to find following user.",
           });
         }
-        return res.json({
-          data: `you followed ${followingUser.username}.`,
-          status: "success",
-          error: null,
+
+        newFollowing.save((err, user) => {
+          if (err) {
+            return res.json({
+              data: null,
+              status: "error",
+              error: "Facing error while following user.",
+            });
+          }
+          return res.json({
+            data: `you followed ${followingUser.username}.`,
+            status: "success",
+            error: null,
+          });
         });
       });
     });
