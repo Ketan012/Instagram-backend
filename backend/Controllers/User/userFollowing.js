@@ -38,6 +38,14 @@ exports.userFollowing = (req, res) => {
     });
   }
 
+  if(userId === following_id){
+    return res.json({
+      data: null,
+      status: "error",
+      error: "You cannot follow userself.",
+    })
+  }
+
   const newFollowing = new UserFollowing(req.body);
   UserFollowing.findOne(req.body, (err, userData) => {
     if (err) {
