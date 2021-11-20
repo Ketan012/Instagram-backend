@@ -2,7 +2,7 @@ const { login, signup, sendEmail, verificationCodeByPhone, verifyEmail, isLogged
 
 const { updateUserProfile, getUserProfile, deleteUserProfile, deleteAll } = require('./User/userProfile');
 
-const { getAllUser, getUserById, getUserData } = require('./User/user');
+const { getAllUser, getUserById, getUserData, userFollowers } = require('./User/user');
 
 const { userFollowing } = require('./User/userFollowing');
 
@@ -12,7 +12,7 @@ const  authControllers = {
 
 const userControllers = {
 
-    getAllUser, getUserById, getUserData,
+    getAllUser, getUserById, getUserData, userFollowers
 }
 
 const userProfileControllers = {

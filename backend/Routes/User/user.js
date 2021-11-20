@@ -10,7 +10,7 @@ const UserProfile = require('../../Models/UserProfile');
 
 const { userControllers, userProfileControllers, authControllers, userFollowingControllers } = controllers;
 const { isAuthenticated, isLoggedin } = authControllers;
-const { createUser, getAllUser, getUserById, updateUser, removeProfilePhoto, getUserData } = userControllers;
+const { createUser, getAllUser, getUserById, updateUser, removeProfilePhoto, getUserData, userFollowers } = userControllers;
 const { updateUserProfile, getUserProfile, deleteUserProfile, deleteAll } = userProfileControllers;
 const { userFollowing } = userFollowingControllers;
 
@@ -33,6 +33,8 @@ route.get('/:id', getUserData);
 route.post('/userprofile/:id' ,isLoggedin, isAuthenticated, upload.single('image') ,updateUserProfile);
 
 route.post('/userFollowings/:id', isLoggedin, isAuthenticated, userFollowing);
+
+route.post('/userFollowers/:id', isLoggedin, isAuthenticated, userFollowers);
 
 route.delete('/userprofile/:id', isLoggedin, isAuthenticated, deleteUserProfile);
 
