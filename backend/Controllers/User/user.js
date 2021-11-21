@@ -225,9 +225,27 @@ exports.getFollowers = (req, res) => {
 
 exports.accountPrivacy = (req, res) => {
     const id = req.params.id;
-    const { isPrivate } = req.body;
+    const { isPrivate: isPrivateInputBody } = req.body;
 
-    User.findOneAndUpdate({_id: id}, { $set: { isPrivate: isPrivate}}, (err, updateduser) => {
+    const { isPrivate } = req.profile;
+
+    if(isPrivateInputBody && isPrivate && (isPrivateInputBody === isPrivate)){
+        return res.json({
+            data: null,
+            status: 'error',
+            error: 'Your account is already private.'
+        })
+    }
+
+    if(!isPrivateInputBody && !isPrivate && (isPrivateInputBody === isPrivate)){
+        return res.json({
+            data: null,
+            status: 'error',
+            error: 'Your account is already public.'
+        })
+    }
+
+    User.findOneAndUpdate({_id: req.profile._id}, { $set: { isPrivate: isPrivateInputBody}}, (err, updateduser) => {
         if(err){
             return res.json({
                 data: null,
