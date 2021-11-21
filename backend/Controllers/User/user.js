@@ -224,7 +224,6 @@ exports.getFollowers = (req, res) => {
 }
 
 exports.accountPrivacy = (req, res) => {
-    const id = req.params.id;
     const { isPrivate: isPrivateInputBody } = req.body;
 
     const { isPrivate } = req.profile;
@@ -250,12 +249,33 @@ exports.accountPrivacy = (req, res) => {
             return res.json({
                 data: null,
                 status: "error",
-                error: "cannot update the user account privacy."
+                error: "Cannot update the user account privacy."
             })
         }
 
         return res.json({
-            data: "account privacy updated successfully.",
+            data: "Account privacy updated successfully.",
+            status: "success",
+            error: null
+        })
+    })
+}
+
+exports.updateUserBio = (req, res) => {
+    const { _id } = req.profile;
+    const { bio } = req.body;
+    
+    User.findOneAndUpdate({ _id: _id }, { bio: bio }, (err, updatedUser) => {
+        if(err){
+            return res.json({
+                data: null,
+                status: "error",
+                error: "Cannot update the user bio."
+            })
+        }
+
+        return res.json({
+            data: "Bio updated successfully.",
             status: "success",
             error: null
         })
