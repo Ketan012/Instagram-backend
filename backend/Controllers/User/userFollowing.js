@@ -57,9 +57,9 @@ exports.userFollowing = (req, res) => {
     }
     if (userData) {
       return res.json({
-        data: "Already Followed this user.",
-        status: "success",
-        error: null,
+        data: null,
+        status: "error",
+        error: "Already Followed this user.",
       });
     }
 
