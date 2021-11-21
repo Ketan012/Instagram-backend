@@ -222,3 +222,24 @@ exports.getFollowers = (req, res) => {
         }
     })
 }
+
+exports.accountPrivacy = (req, res) => {
+    const id = req.params.id;
+    const { isPrivate } = req.body;
+
+    User.findOneAndUpdate({_id: id}, { $set: { isPrivate: isPrivate}}, (err, updateduser) => {
+        if(err){
+            return res.json({
+                data: null,
+                status: "error",
+                error: "cannot update the user account privacy."
+            })
+        }
+
+        return res.json({
+            data: "account privacy updated successfully.",
+            status: "success",
+            error: null
+        })
+    })
+}
