@@ -1,6 +1,7 @@
 const User = require('./../../Models/User');
 const UserFollowers = require('./../../Models/UserFollowers');
 const UserFollowing = require('./../../Models/UserFollowing');
+const BlockList = require('./../../Models/BlockList');
 var ObjectID = require("mongodb").ObjectID;
 
 exports.getUserById = (req, res, next, id) => {
@@ -281,3 +282,123 @@ exports.updateUserBio = (req, res) => {
         })
     })
 }
+
+exports.blockedList = (req, res) => {
+  userId = req.body.userId;
+  blockUserId = req.body.blockUserId;
+
+  if (!blockUserId || "") {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "blockUserId is required.",
+    });
+  }
+
+  if (!userId || "") {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "UserId is required.",
+    });
+  }
+
+  if (!ObjectID.isValid(userId)) {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "UserId is invalid.",
+    });
+  }
+
+  if (!ObjectID.isValid(blockUserId)) {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "blockUserId is invalid.",
+    });
+  }
+
+  if (userId === blockUserId) {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "You cannot block userself.",
+    });
+  }
+
+  const newBlockUser = new BlockList(req.body);
+  BlockList.findOne({ userId: userId, blockUserId: blockUserId }, (err, blockUser) => {
+      if (err) {
+        return res.json({
+          data: null,
+          status: "error",
+          error: "Not able to find a user.",
+        });
+      }
+      if (blockUser) {
+        return res.json({
+          data: null,
+          status: "error",
+          error: "You have already blocked this user.",
+        });
+      }
+
+      User.findOne({ _id: userId }, (err, user) => {
+        if (err || !user) {
+          return res.json({
+            data: null,
+            status: "error",
+            error: "User not found in database.",
+          });
+        }
+
+        User.findOne({ _id: blockUserId }, (err, blockUser) => {
+          if (err) {
+            return res.json({
+              data: null,
+              status: "error",
+              error: "Unable to find Block user.",
+            });
+          }
+
+          newBlockUser.save((err, user) => {
+            if (err) {
+              return res.json({
+                data: null,
+                status: "error",
+                error: "Facing error while blocking user.",
+              });
+            }
+
+            UserFollowers.deleteOne({ follower_id : blockUserId }, (err) => {
+              if (err) {
+                return res.json({
+                  data: null,
+                  status: "error",
+                  error: "Unable to find Block user.",
+                });
+              }
+            });
+
+            UserFollowing.deleteOne({ following_id : blockUserId }, (err) => {
+              if (err) {
+                return res.json({
+                  data: null,
+                  status: "error",
+                  error: "Unable to find Block user.",
+                });
+              }
+            });
+
+            return res.json({
+              data: `You have successfully blocked this user.`,
+              status: "success",
+              error: null,
+            });
+          });
+        });
+      });
+    }
+  );
+};
