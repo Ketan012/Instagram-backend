@@ -25,6 +25,7 @@ const {
   accountPrivacy,
   updateUserBio,
   blockedList,
+  unFollowUser,
 } = require("./User/user");
 
 const { userFollowing } = require("./User/userFollowing");
@@ -49,6 +50,7 @@ const userControllers = {
   accountPrivacy,
   updateUserBio,
   blockedList,
+  unFollowUser,
 };
 
 const userProfileControllers = {
