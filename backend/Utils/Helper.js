@@ -29,6 +29,10 @@ class Helper{
     isValidEmail(email){
         return constants.isValidEmail.test(email);
     }
+
+    isMongoId(id) {
+        return /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id);
+      }
 }
 
 module.exports = new Helper();
