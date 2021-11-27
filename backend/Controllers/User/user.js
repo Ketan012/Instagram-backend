@@ -423,11 +423,11 @@ exports.blockedList = (req, res) => {
 
 exports.unFollowUser = (req, res) => {
   const userId = req.profile._id;
-  const { userId: blockUserId } = req.body;
+  const unFollowUserId = req.params.unFollowUserId;
 
   let isUnfollowSuccess = 0;
-
-  if (!blockUserId) {
+  
+  if (!unFollowUserId) {
     return res.json({
       data: null,
       status: "error",
@@ -435,7 +435,7 @@ exports.unFollowUser = (req, res) => {
     });
   }
 
-  if (!Helper.isMongoId(blockUserId)) {
+  if (!Helper.isMongoId(unFollowUserId)) {
     return res.json({
       data: null,
       status: "error",
@@ -443,7 +443,7 @@ exports.unFollowUser = (req, res) => {
     });
   }
 
-  if (userId === blockUserId) {
+  if (userId === unFollowUserId) {
     return res.json({
       data: null,
       status: "error",
@@ -451,7 +451,7 @@ exports.unFollowUser = (req, res) => {
     });
   }
 
-  User.findOne({ _id: blockUserId }, (err, user) => {
+  User.findOne({ _id: unFollowUserId }, (err, user) => {
     if (err || !user) {
       return res.json({
         data: null,
@@ -460,7 +460,7 @@ exports.unFollowUser = (req, res) => {
       });
     }
 
-    const followingQuery = { userId: userId, following_id: blockUserId };
+    const followingQuery = { userId: userId, following_id: unFollowUserId };
 
     UserFollowing.findOne(followingQuery, (err, following_user) => {
       if (err || !following_user) {
@@ -482,7 +482,7 @@ exports.unFollowUser = (req, res) => {
 
         isUnfollowSuccess += 1;
 
-        const followerQuery = { userId: blockUserId, follower_id: userId };
+        const followerQuery = { userId: unFollowUserId, follower_id: userId };
 
         UserFollowers.deleteOne(followerQuery, (err, blockuser) => {
           if (err || !blockuser) {

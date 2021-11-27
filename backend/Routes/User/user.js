@@ -40,6 +40,6 @@ route.put('/update/bio/:id', isLoggedin, isAuthenticated, updateUserBio);
 
 route.delete('/block/:id/:blockUserId', isLoggedin, isAuthenticated, blockedList);
 
-route.delete('/unfollow/:id', isLoggedin, isAuthenticated, unFollowUser);
+route.delete('/unfollow/:id/:unFollowUserId', isLoggedin, isAuthenticated, unFollowUser);
 
 module.exports = route;
