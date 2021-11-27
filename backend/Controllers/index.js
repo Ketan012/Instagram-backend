@@ -19,7 +19,7 @@ const {
   getAllUser,
   getUserById,
   getUserData,
-  userFollowers,
+  userFollowing,
   getFollowings,
   getFollowers,
   accountPrivacy,
@@ -27,8 +27,6 @@ const {
   blockedList,
   unFollowUser,
 } = require("./User/user");
-
-const { userFollowing } = require("./User/userFollowing");
 
 const authControllers = {
   login,
@@ -44,7 +42,7 @@ const userControllers = {
   getAllUser,
   getUserById,
   getUserData,
-  userFollowers,
+  userFollowing,
   getFollowings,
   getFollowers,
   accountPrivacy,
@@ -60,15 +58,10 @@ const userProfileControllers = {
   deleteAll,
 };
 
-const userFollowingControllers = {
-  userFollowing,
-};
-
 const controllers = {
   authControllers,
   userControllers,
   userProfileControllers,
-  userFollowingControllers,
 };
 
 module.exports = controllers;
