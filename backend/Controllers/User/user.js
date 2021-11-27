@@ -290,10 +290,10 @@ exports.updateUserBio = (req, res) => {
 };
 
 exports.blockedList = (req, res) => {
-  userId = req.body.userId;
-  blockUserId = req.body.blockUserId;
+  userId = req.profile._id;
+  blockUserId = req.params.blockUserId;
 
-  if (!blockUserId || "") {
+  if (!blockUserId) {
     return res.json({
       data: null,
       status: "error",
@@ -301,7 +301,7 @@ exports.blockedList = (req, res) => {
     });
   }
 
-  if (!userId || "") {
+  if (!userId) {
     return res.json({
       data: null,
       status: "error",
@@ -333,7 +333,7 @@ exports.blockedList = (req, res) => {
     });
   }
 
-  const newBlockUser = new BlockList(req.body);
+  const newBlockUser = new BlockList({userId: userId, blockUserId: blockUserId});
   BlockList.findOne(
     { userId: userId, blockUserId: blockUserId },
     (err, blockUser) => {
