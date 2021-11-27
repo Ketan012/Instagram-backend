@@ -43,14 +43,15 @@ exports.getAllUser = (req, res) => {
   });
 };
 
-exports.userFollowers = (req, res) => {
-  const { userId, follower_id } = req.body;
+exports.userFollowing = (req, res) => {
+  userId = req.body.userId;
+  following_id = req.body.following_id;
 
-  if (!follower_id || "") {
+  if (!following_id || "") {
     return res.json({
       data: null,
       status: "error",
-      error: "Follower userId is not provided.",
+      error: "Following userId is required.",
     });
   }
 
@@ -70,15 +71,15 @@ exports.userFollowers = (req, res) => {
     });
   }
 
-  if (!Helper.isMongoId(follower_id)) {
+  if (!Helper.isMongoId(following_id)) {
     return res.json({
       data: null,
       status: "error",
-      error: "Follower userid is invalid.",
+      error: "Following userid is invalid.",
     });
   }
 
-  if (userId === follower_id) {
+  if (userId === following_id) {
     return res.json({
       data: null,
       status: "error",
@@ -86,62 +87,71 @@ exports.userFollowers = (req, res) => {
     });
   }
 
-  const newFollower = new UserFollowers(req.body);
-  UserFollowers.findOne(
-    { userId: userId, follower_id: follower_id },
-    (err, userData) => {
-      if (err) {
+  User.findOne({ _id: userId }, (err, user) => {
+    if (err || !user) {
+      return res.json({
+        data: null,
+        status: "error",
+        error: "User not found in database.",
+      });
+    }
+
+    User.findOne({ _id: following_id }, (err, followingUser) => {
+      if (err || !followingUser) {
         return res.json({
           data: null,
           status: "error",
-          error: "Not able to find a user.",
+          error: "Unable to find following user in database.",
         });
       }
 
-      if (userData) {
-        return res.json({
-          data: null,
-          status: "error",
-          error: "this user is already following you.",
-        });
-      }
+  const newFollowing = new UserFollowing(req.body);
+  const newFollower = new UserFollowers({userId: following_id, follower_id: userId});
+  UserFollowing.findOne({userId: userId, following_id: following_id}, (err, userData) => {
+    if (err) {
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Not able to find a user.",
+      });
+    }
+    if (userData) {
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Already Followed this user.",
+      });
+    }
 
-      User.findOne({ _id: userId }, (err, user) => {
-        if (err || !user) {
-          return res.json({
-            data: null,
-            status: "error",
-            error: "User not found in database.",
-          });
-        }
-
-        User.findOne({ _id: follower_id }, (err, userfollower) => {
-          if (err || !userfollower) {
+        newFollowing.save((err, user) => {
+          if (err) {
             return res.json({
               data: null,
               status: "error",
-              error: "Follower user not found in database.",
+              error: "Facing error while following user.",
             });
           }
-          newFollower.save((err, user) => {
-            if (err) {
-              return res.json({
-                data: null,
-                status: "error",
-                error: "facing problem.",
-              });
-            }
+          if(followingUser){
 
+            newFollower.save((err, user)=>{
+              if(err) {
+                return res.json({
+                  data: null,
+                  status: "error",
+                  error: "Facing error while following user.",
+                });
+              }
             return res.json({
-              data: `${follower_id} is following you.`,
+              data: `you followed ${followingUser.username}.`,
               status: "success",
               error: null,
             });
-          });
+          })
+          }
         });
       });
-    }
-  );
+    });
+  });
 };
 
 exports.getFollowings = (req, res) => {
