@@ -2,7 +2,7 @@ const User = require("./../../Models/User");
 const UserFollowers = require("./../../Models/UserFollowers");
 const UserFollowing = require("./../../Models/UserFollowing");
 const BlockList = require("./../../Models/BlockList");
-var ObjectID = require("mongodb").ObjectID;
+const Helper = require("../../Utils/Helper");
 
 exports.getUserById = (req, res, next, id) => {
   User.findById(id).exec((err, user) => {
@@ -62,7 +62,7 @@ exports.userFollowers = (req, res) => {
     });
   }
 
-  if (!ObjectID.isValid(userId)) {
+  if (!Helper.isMongoId(userId)) {
     return res.json({
       data: null,
       status: "error",
@@ -70,7 +70,7 @@ exports.userFollowers = (req, res) => {
     });
   }
 
-  if (!ObjectID.isValid(follower_id)) {
+  if (!Helper.isMongoId(follower_id)) {
     return res.json({
       data: null,
       status: "error",
@@ -155,7 +155,7 @@ exports.getFollowings = (req, res) => {
     });
   }
 
-  if (!ObjectID.isValid(userId)) {
+  if (!Helper.isMongoId(userId)) {
     return res.json({
       data: null,
       status: "error",
@@ -196,7 +196,7 @@ exports.getFollowers = (req, res) => {
     });
   }
 
-  if (!ObjectID.isValid(userId)) {
+  if (!Helper.isMongoId(userId)) {
     return res.json({
       data: null,
       status: "error",
@@ -309,7 +309,7 @@ exports.blockedList = (req, res) => {
     });
   }
 
-  if (!ObjectID.isValid(userId)) {
+  if (!Helper.isMongoId(userId)) {
     return res.json({
       data: null,
       status: "error",
@@ -317,7 +317,7 @@ exports.blockedList = (req, res) => {
     });
   }
 
-  if (!ObjectID.isValid(blockUserId)) {
+  if (!Helper.isMongoId(blockUserId)) {
     return res.json({
       data: null,
       status: "error",
@@ -425,7 +425,7 @@ exports.unFollowUser = (req, res) => {
     });
   }
 
-  if (!ObjectID.isValid(blockUserId)) {
+  if (!Helper.isMongoId(blockUserId)) {
     return res.json({
       data: null,
       status: "error",

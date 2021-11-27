@@ -31,7 +31,7 @@ class Helper{
     }
 
     isMongoId(id) {
-        return /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i.test(id);
+        return constants.isValidMongoId.test(id);
       }
 }
 
