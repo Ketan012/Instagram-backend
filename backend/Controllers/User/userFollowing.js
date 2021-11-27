@@ -22,7 +22,7 @@ exports.userFollowing = (req, res) => {
     });
   }
 
-  if (!ObjectID.isValid(userId)) {
+  if (!Helper.isMongoId(userId)) {
     return res.json({
       data: null,
       status: "error",
@@ -30,7 +30,7 @@ exports.userFollowing = (req, res) => {
     });
   }
 
-  if (!ObjectID.isValid(following_id)) {
+  if (!Helper.isMongoId(following_id)) {
     return res.json({
       data: null,
       status: "error",
@@ -73,7 +73,7 @@ exports.userFollowing = (req, res) => {
       }
 
       User.findOne({ _id: following_id }, (err, followingUser) => {
-        if (err) {
+        if (err || !followingUser) {
           return res.json({
             data: null,
             status: "error",
@@ -89,11 +89,13 @@ exports.userFollowing = (req, res) => {
               error: "Facing error while following user.",
             });
           }
-          return res.json({
-            data: `you followed ${followingUser.username}.`,
-            status: "success",
-            error: null,
-          });
+          if(followingUser){
+            return res.json({
+              data: `you followed ${followingUser.username}.`,
+              status: "success",
+              error: null,
+            });
+          }
         });
       });
     });

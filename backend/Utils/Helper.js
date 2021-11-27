@@ -29,6 +29,10 @@ class Helper{
     isValidEmail(email){
         return constants.isValidEmail.test(email);
     }
+
+    isMongoId(id) {
+        return constants.isValidMongoId.test(id);
+      }
 }
 
 module.exports = new Helper();

@@ -41,7 +41,7 @@ route.post('/accountprivacy/:id', isLoggedin, isAuthenticated, accountPrivacy);
 
 route.put('/update/bio/:id', isLoggedin, isAuthenticated, updateUserBio);
 
-route.delete('/block/:id', isLoggedin, isAuthenticated, blockedList);
+route.delete('/block/:id/:blockUserId', isLoggedin, isAuthenticated, blockedList);
 
 route.delete('/unfollow/:id', isLoggedin, isAuthenticated, unFollowUser);
 
