@@ -105,51 +105,82 @@ exports.userFollowing = (req, res) => {
         });
       }
 
-  const newFollowing = new UserFollowing(req.body);
-  const newFollower = new UserFollowers({userId: following_id, follower_id: userId});
-  UserFollowing.findOne({userId: userId, following_id: following_id}, (err, userData) => {
-    if (err) {
-      return res.json({
-        data: null,
-        status: "error",
-        error: "Not able to find a user.",
-      });
-    }
-    if (userData) {
-      return res.json({
-        data: null,
-        status: "error",
-        error: "Already Followed this user.",
-      });
-    }
-
-        newFollowing.save((err, user) => {
-          if (err) {
+      BlockList.findOne(
+        { userId: userId, blockUserId: following_id },
+        (err, blockUser) => {
+          console.log("err: ", err);
+          console.log("blockUser: ", blockUser);
+          if (blockUser !== null) {
             return res.json({
               data: null,
               status: "error",
-              error: "Facing error while following user.",
+              error: "You have blocked this user.",
             });
           }
-          if(followingUser){
 
-            newFollower.save((err, user)=>{
-              if(err) {
+          BlockList.findOne({ userId: following_id, blockUserId: userId },(err, blockuserid) => {
+              if (blockuserid !== null) {
                 return res.json({
                   data: null,
                   status: "error",
-                  error: "Facing error while following user.",
+                  error: "This user has blocked you.",
                 });
               }
-            return res.json({
-              data: `you followed ${followingUser.username}.`,
-              status: "success",
-              error: null,
-            });
-          })
-          }
-        });
-      });
+
+              const newFollowing = new UserFollowing(req.body);
+              const newFollower = new UserFollowers({
+                userId: following_id,
+                follower_id: userId,
+              });
+              UserFollowing.findOne(
+                { userId: userId, following_id: following_id },
+                (err, userData) => {
+                  if (err) {
+                    return res.json({
+                      data: null,
+                      status: "error",
+                      error: "Not able to find a user.",
+                    });
+                  }
+                  if (userData) {
+                    return res.json({
+                      data: null,
+                      status: "error",
+                      error: "Already Followed this user.",
+                    });
+                  }
+
+                  newFollowing.save((err, user) => {
+                    if (err) {
+                      return res.json({
+                        data: null,
+                        status: "error",
+                        error: "Facing error while following user.",
+                      });
+                    }
+                    if (followingUser) {
+                      newFollower.save((err, user) => {
+                        if (err) {
+                          return res.json({
+                            data: null,
+                            status: "error",
+                            error: "Facing error while following user.",
+                          });
+                        }
+                        return res.json({
+                          data: `you followed ${followingUser.username}.`,
+                          status: "success",
+                          error: null,
+                        });
+                      });
+                    }
+                  });
+                }
+              );
+            }
+          );
+        }
+      );
     });
   });
 };
@@ -343,7 +374,10 @@ exports.blockedList = (req, res) => {
     });
   }
 
-  const newBlockUser = new BlockList({userId: userId, blockUserId: blockUserId});
+  const newBlockUser = new BlockList({
+    userId: userId,
+    blockUserId: blockUserId,
+  });
   BlockList.findOne(
     { userId: userId, blockUserId: blockUserId },
     (err, blockUser) => {
@@ -426,7 +460,7 @@ exports.unFollowUser = (req, res) => {
   const unFollowUserId = req.params.unFollowUserId;
 
   let isUnfollowSuccess = 0;
-  
+
   if (!unFollowUserId) {
     return res.json({
       data: null,
@@ -467,7 +501,7 @@ exports.unFollowUser = (req, res) => {
         return res.json({
           data: null,
           status: "error",
-          errorL: "You are not following this user.",
+          error: "You are not following this user.",
         });
       }
 
