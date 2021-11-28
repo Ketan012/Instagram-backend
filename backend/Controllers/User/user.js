@@ -108,8 +108,6 @@ exports.userFollowing = (req, res) => {
       BlockList.findOne(
         { userId: userId, blockUserId: following_id },
         (err, blockUser) => {
-          console.log("err: ", err);
-          console.log("blockUser: ", blockUser);
           if (blockUser !== null) {
             return res.json({
               data: null,
@@ -537,3 +535,100 @@ exports.unFollowUser = (req, res) => {
     });
   });
 };
+
+exports.removeFollower = (req, res) => {
+  const { _id: userId } = req.profile;
+  const followerId = req.params.followerId;
+
+  if(!userId || userId === ""){
+    return res.json({
+      data: null,
+      status: "error",
+      error: "UserId is required."
+    })
+  }
+
+  if(!followerId || followerId === ""){
+    return res.json({
+      data: null,
+      status: "error",
+      error: "Follower id is required."
+    })
+  }
+
+  if(!Helper.isMongoId(userId)){
+    return res.json({
+      data: null,
+      status: "error",
+      error: "UserId is invalid."
+    })
+  }
+
+  if(!Helper.isMongoId(followerId)){
+    return res.json({
+      data: null,
+      status: "error",
+      error: "Follower id is invalid."
+    })
+  }
+
+  if(userId === followerId){
+    return res.json({
+      data: null,
+      status: "error",
+      error: "You cannot remove yourself."
+    })
+  }
+
+  User.findOne({ _id: followerId }, (err, user) => {
+    if(err || !user){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Follower id is not found."
+      })
+    }
+
+    const query = { userId: userId, follower_id: followerId};
+    UserFollowers.findOne(query, (err, userFollower) => {
+      if(err || !userFollower){
+        return res.json({
+          data: null,
+          status: "error",
+          error: "This user is not following you."
+        })
+      }
+
+      if(userFollower){
+        UserFollowers.deleteOne(query, (err, removefollower) => {
+          if(err){
+            return res.json({
+              data: null,
+              status: "error",
+              error: "Facing error while removing the follower."
+            })
+          }
+          if(removefollower){
+            UserFollowing.deleteOne({userId: followerId, following_id: userId}, (err, removefollowing) => {
+              if(err){
+                return res.json({
+                  data: null,
+                  status: "error",
+                  error: "Facing error while removing the follower."
+                })
+              } 
+              
+              if(removefollowing){
+                  return res.json({
+                    data: "You have remove this user from your followers list.",
+                    status: "success",
+                    error: null
+                  })
+                }
+            })
+          }
+        })
+      }
+    })
+  });
+}
