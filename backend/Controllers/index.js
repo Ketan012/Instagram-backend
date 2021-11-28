@@ -27,6 +27,7 @@ const {
   blockedList,
   unFollowUser,
   removeFollower,
+  updateUserData,
 } = require("./User/user");
 
 const authControllers = {
@@ -51,6 +52,7 @@ const userControllers = {
   blockedList,
   unFollowUser,
   removeFollower,
+  updateUserData,
 };
 
 const userProfileControllers = {

@@ -632,3 +632,102 @@ exports.removeFollower = (req, res) => {
     })
   });
 }
+
+exports.updateUserData = (req, res) => {
+  const { _id: userId } = req.profile;
+  const { username, displayname, email } = req.body;
+
+  User.findOne({ _id: userId }, (err, user) => {
+    if(err || !user){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "User not found."
+      })
+    }
+
+    if(!username || username === ""){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Username is required."
+      })
+    }
+
+    if(!displayname || displayname === ""){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Display name is required."
+      })
+    }
+
+    if(!email || email === ""){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Email is required."
+      })
+    }
+
+    if(!Helper.isValidEmail(email)){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Email is invalid."
+      })
+    }
+
+    if(username.length < 3){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Username should be at least 3 characters long."
+      })
+    }
+
+    if(username.length > 15){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Username should at most 15 characters long."
+      })
+    }
+
+    if(displayname.length < 3){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Display name should be at least 3 characters long."
+      })
+    }
+
+    if(displayname.length > 15){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Display name should be at most 15 characters long."
+      })
+    }
+
+    User.findOneAndUpdate({ _id: userId }, { 
+      username: username,
+      displayname: displayname,
+      email: email
+     }, (err, updatedUser) => {
+      if (err) {
+        return res.json({
+          data: null,
+          status: "error",
+          error: "Cannot update the user data.",
+        });
+      }
+  
+      return res.json({
+        data: "User data updated successfully.",
+        status: "success",
+        error: null,
+      });
+    });
+  })
+}
