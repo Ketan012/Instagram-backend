@@ -572,7 +572,7 @@ exports.removeFollower = (req, res) => {
     })
   }
 
-  if(userId === followerId){
+  if(userId == followerId){
     return res.json({
       data: null,
       status: "error",
