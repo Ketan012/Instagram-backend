@@ -441,6 +441,26 @@ exports.blockedList = (req, res) => {
               }
             });
 
+            UserFollowers.deleteOne({ follower_id: userId, userId: blockUserId }, (err) => {
+              if (err) {
+                return res.json({
+                  data: null,
+                  status: "error",
+                  error: "Unable to find Block user.",
+                });
+              }
+            });
+
+            UserFollowing.deleteOne({ following_id: userId, userId: blockUserId }, (err) => {
+              if (err) {
+                return res.json({
+                  data: null,
+                  status: "error",
+                  error: "Unable to find Block user.",
+                });
+              }
+            });
+
             return res.json({
               data: `You have successfully blocked this user.`,
               status: "success",
