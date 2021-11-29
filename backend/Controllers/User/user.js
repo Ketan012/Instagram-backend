@@ -454,8 +454,8 @@ exports.blockedList = (req, res) => {
 };
 
 exports.unblockUser = (req, res) => {
-  userId = req.params.id;
-  unblockUserId = req.body.unblockUserId;
+  userId = req.profile._id;
+  unblockUserId = req.params.unblockUserId;
 
   if (!unblockUserId) {
     return res.json({
@@ -499,12 +499,12 @@ exports.unblockUser = (req, res) => {
 
   BlockList.findOne(
     { userId: userId, blockUserId: unblockUserId },
-    (err) => {
-      if (err) {
+    (err, unblockUser) => {
+      if (err || !unblockUser) {
         return res.json({
           data: null,
           status: "error",
-          error: "Not able to find a user.",
+          error: "You have already unblocked this user.",
         });
       }
 
@@ -526,7 +526,9 @@ exports.unblockUser = (req, res) => {
             });
           }
 
-            BlockList.deleteOne({ blockUserId: unblockUserId, userId: userId }, (err, unblockUser) => {
+          BlockList.deleteOne(
+            { blockUserId: unblockUserId, userId: userId },
+            (err, unblockUser) => {
               if (err || !unblockUser) {
                 return res.json({
                   data: null,
@@ -534,13 +536,14 @@ exports.unblockUser = (req, res) => {
                   error: "Unable to find unblock user.",
                 });
               }
-            });
+            }
+          );
 
-            return res.json({
-              data: `You have successfully unblocked this user.`,
-              status: "success",
-              error: null,
-            });
+          return res.json({
+            data: `You have successfully unblocked this user.`,
+            status: "success",
+            error: null,
+          });
         });
       });
     }

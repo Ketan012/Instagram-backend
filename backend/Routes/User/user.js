@@ -40,7 +40,7 @@ route.put('/update/bio/:id', isLoggedin, isAuthenticated, updateUserBio);
 
 route.delete('/block/:id/:blockUserId', isLoggedin, isAuthenticated, blockedList);
 
-route.post('/unblock/:id', isLoggedin, isAuthenticated, unblockUser);
+route.delete('/unblock/:id/:unblockUserId', isLoggedin, isAuthenticated, unblockUser);
 
 route.delete('/unfollow/:id/:unFollowUserId', isLoggedin, isAuthenticated, unFollowUser);
 
