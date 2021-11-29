@@ -10,7 +10,7 @@ const UserProfile = require('../../Models/UserProfile');
 
 const { userControllers, userProfileControllers, authControllers } = controllers;
 const { isAuthenticated, isLoggedin } = authControllers;
-const { createUser, getAllUser, getUserById, getUserData, userFollowing, getFollowings, getFollowers, accountPrivacy, updateUserBio, blockedList, unFollowUser, removeFollower, updateUserData } = userControllers;
+const { createUser, getAllUser, getUserById, getUserData, userFollowing, getFollowings, getFollowers, accountPrivacy, updateUserBio, blockedList, unblockUser, unFollowUser, removeFollower, updateUserData } = userControllers;
 const { updateUserProfile, getUserProfile, deleteUserProfile, deleteAll } = userProfileControllers;
 
 
@@ -39,6 +39,8 @@ route.post('/accountprivacy/:id', isLoggedin, isAuthenticated, accountPrivacy);
 route.put('/update/bio/:id', isLoggedin, isAuthenticated, updateUserBio);
 
 route.delete('/block/:id/:blockUserId', isLoggedin, isAuthenticated, blockedList);
+
+route.delete('/unblock/:id/:unblockUserId', isLoggedin, isAuthenticated, unblockUser);
 
 route.delete('/unfollow/:id/:unFollowUserId', isLoggedin, isAuthenticated, unFollowUser);
 
