@@ -421,7 +421,7 @@ exports.blockedList = (req, res) => {
               });
             }
 
-            UserFollowers.deleteOne({ follower_id: blockUserId }, (err) => {
+            UserFollowers.deleteOne({ follower_id: blockUserId, userId: userId }, (err) => {
               if (err) {
                 return res.json({
                   data: null,
@@ -431,7 +431,7 @@ exports.blockedList = (req, res) => {
               }
             });
 
-            UserFollowing.deleteOne({ following_id: blockUserId }, (err) => {
+            UserFollowing.deleteOne({ following_id: blockUserId, userId: userId }, (err) => {
               if (err) {
                 return res.json({
                   data: null,
