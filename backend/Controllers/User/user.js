@@ -453,6 +453,101 @@ exports.blockedList = (req, res) => {
   );
 };
 
+exports.unblockUser = (req, res) => {
+  userId = req.params.id;
+  unblockUserId = req.body.unblockUserId;
+
+  if (!unblockUserId) {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "Unblock user id is required.",
+    });
+  }
+
+  if (!userId) {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "UserId is required.",
+    });
+  }
+
+  if (!Helper.isMongoId(userId)) {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "UserId is invalid.",
+    });
+  }
+
+  if (!Helper.isMongoId(unblockUserId)) {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "Unblock user id is invalid.",
+    });
+  }
+
+  if (userId === unblockUserId) {
+    return res.json({
+      data: null,
+      status: "error",
+      error: "You cannot unblock yourself.",
+    });
+  }
+
+  BlockList.findOne(
+    { userId: userId, blockUserId: unblockUserId },
+    (err) => {
+      if (err) {
+        return res.json({
+          data: null,
+          status: "error",
+          error: "Not able to find a user.",
+        });
+      }
+
+      User.findOne({ _id: userId }, (err, user) => {
+        if (err || !user) {
+          return res.json({
+            data: null,
+            status: "error",
+            error: "User not found in database.",
+          });
+        }
+
+        User.findOne({ _id: unblockUserId }, (err, unblockUser) => {
+          if (err) {
+            return res.json({
+              data: null,
+              status: "error",
+              error: "Unable to find unblock user.",
+            });
+          }
+
+            BlockList.deleteOne({ blockUserId: unblockUserId, userId: userId }, (err, unblockUser) => {
+              if (err || !unblockUser) {
+                return res.json({
+                  data: null,
+                  status: "error",
+                  error: "Unable to find unblock user.",
+                });
+              }
+            });
+
+            return res.json({
+              data: `You have successfully unblocked this user.`,
+              status: "success",
+              error: null,
+            });
+        });
+      });
+    }
+  );
+};
+
+
 exports.unFollowUser = (req, res) => {
   const userId = req.profile._id;
   const unFollowUserId = req.params.unFollowUserId;
