@@ -5,6 +5,14 @@ const BlockList = require("./../../Models/BlockList");
 const Helper = require("../../Utils/Helper");
 
 exports.getUserById = (req, res, next, id) => {
+
+  if(!Helper.isMongoId(id)){
+    return res.json({
+      data: null,
+      status: "error",
+      error: "Id is invalid.",
+    });
+  }
   User.findById(id).exec((err, user) => {
     if (err) {
       return res.json({
@@ -848,4 +856,42 @@ exports.updateUserData = (req, res) => {
       });
     });
   })
+}
+
+exports.searchUser = (req, res) => {
+  const searchString = req.query.searchstring;
+  
+  if(searchString === ""){
+    return res.json({
+      data: null,
+      status: "error",
+      error: "Search string is required."
+    })
+  }
+
+  User.find({
+    $or: [
+      {
+        username: { $regex: `^${searchString}`, $options: "i" },
+      },
+      {
+        displayname: { $regex: `^${searchString}`, $options: "i" },
+      },
+    ],
+  }, (err, users) => {
+
+    if(err){
+      return res.json({
+        data: null,
+        status: "error",
+        error: "Facing error while fetching the users."
+      })
+    }
+
+    return res.json({
+      data: users,
+      status: "success",
+      error: null
+    })
+  });
 }
