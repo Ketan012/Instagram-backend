@@ -348,22 +348,6 @@ exports.blockedList = (req, res) => {
     });
   }
 
-  if (!userId) {
-    return res.json({
-      data: null,
-      status: "error",
-      error: "UserId is required.",
-    });
-  }
-
-  if (!Helper.isMongoId(userId)) {
-    return res.json({
-      data: null,
-      status: "error",
-      error: "UserId is invalid.",
-    });
-  }
-
   if (!Helper.isMongoId(blockUserId)) {
     return res.json({
       data: null,
@@ -490,22 +474,6 @@ exports.unblockUser = (req, res) => {
       data: null,
       status: "error",
       error: "Unblock user id is required.",
-    });
-  }
-
-  if (!userId) {
-    return res.json({
-      data: null,
-      status: "error",
-      error: "UserId is required.",
-    });
-  }
-
-  if (!Helper.isMongoId(userId)) {
-    return res.json({
-      data: null,
-      status: "error",
-      error: "UserId is invalid.",
     });
   }
 
@@ -666,27 +634,11 @@ exports.removeFollower = (req, res) => {
   const { _id: userId } = req.profile;
   const followerId = req.params.followerId;
 
-  if(!userId || userId === ""){
-    return res.json({
-      data: null,
-      status: "error",
-      error: "UserId is required."
-    })
-  }
-
   if(!followerId || followerId === ""){
     return res.json({
       data: null,
       status: "error",
       error: "Follower id is required."
-    })
-  }
-
-  if(!Helper.isMongoId(userId)){
-    return res.json({
-      data: null,
-      status: "error",
-      error: "UserId is invalid."
     })
   }
 
