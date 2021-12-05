@@ -29,6 +29,7 @@ const {
   unFollowUser,
   removeFollower,
   updateUserData,
+  searchUser,
 } = require("./User/user");
 
 const authControllers = {
@@ -55,6 +56,7 @@ const userControllers = {
   unFollowUser,
   removeFollower,
   updateUserData,
+  searchUser,
 };
 
 const userProfileControllers = {
