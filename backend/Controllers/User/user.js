@@ -2,6 +2,7 @@ const User = require("./../../Models/User");
 const UserFollowers = require("./../../Models/UserFollowers");
 const UserFollowing = require("./../../Models/UserFollowing");
 const BlockList = require("./../../Models/BlockList");
+const UserProfile = require("./../../Models/UserProfile");
 const Helper = require("../../Utils/Helper");
 
 exports.getUserById = (req, res, next, id) => {
@@ -810,40 +811,68 @@ exports.updateUserData = (req, res) => {
   })
 }
 
-exports.searchUser = (req, res) => {
+exports.searchUser = async (req, res) => {
   const searchString = req.query.searchstring;
-  
-  if(searchString === ""){
+
+  if (searchString === "") {
     return res.json({
       data: null,
       status: "error",
-      error: "Search string is required."
-    })
+      error: "Search string is required.",
+    });
   }
 
-  User.find({
-    $or: [
-      {
-        username: { $regex: `^${searchString}`, $options: "i" },
-      },
-      {
-        displayname: { $regex: `^${searchString}`, $options: "i" },
-      },
-    ],
-  }, (err, users) => {
+  let data = [];
 
-    if(err){
-      return res.json({
-        data: null,
-        status: "error",
-        error: "Facing error while fetching the users."
-      })
-    }
-
-    return res.json({
-      data: users,
-      status: "success",
-      error: null
-    })
+  const usersData = await new Promise((resolve, reject) => {
+    User.find(
+      {
+        $or: [
+          {
+            username: { $regex: `^${searchString}`, $options: "i" },
+          },
+          {
+            displayname: { $regex: `^${searchString}`, $options: "i" },
+          },
+        ],
+      },
+      (err, users) => {
+        resolve(users);
+      }
+    );
   });
-}
+
+  for (let i = 0; i < usersData.length; i++) {
+    const { _id, username, displayname } = usersData[i];
+    const finalResults = await new Promise(async (resolve, reject) => {
+      await UserProfile.findOne({ userId: _id }, async (err, userprofiles) => {
+        await resolve(userprofiles);
+      });
+    });
+
+    if (finalResults) {
+      const { profile } = finalResults;
+      const { buffer } = profile;
+
+      data.push({
+        _id: _id,
+        username: username,
+        displayname: displayname,
+        profile: buffer,
+      });
+    } else {
+      data.push({
+        _id: _id,
+        username: username,
+        displayname: displayname,
+        profile: "no profile data",
+      });
+    }
+  }
+
+  return res.json({
+    data: data,
+    status: "success",
+    error: null,
+  });
+};
