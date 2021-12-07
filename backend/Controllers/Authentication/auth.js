@@ -236,8 +236,6 @@ exports.verifyEmail = (req, res) => {
     })
 }
 
-
-// TODO: will come here later 
 //Middleware
 exports.isLoggedin = expressJwt({
     secret : 'SECRET',
