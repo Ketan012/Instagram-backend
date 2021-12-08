@@ -23,6 +23,8 @@ app.set("view engine", "ejs");
 
 app.use('/api/v1/auth', route.authRoute);
 app.use('/api/v1/user', route.userRoute);
+app.use('/api/v1/post', route.postRoutes);
+
 app.listen(process.env.PORT, ()=>{
     console.log(`App is running on port ${process.env.PORT}`);
 })

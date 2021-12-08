@@ -32,6 +32,10 @@ const {
   searchUser,
 } = require("./User/user");
 
+const { 
+  createPost
+} = require("./Post/post");
+
 const authControllers = {
   login,
   signup,
@@ -66,10 +70,15 @@ const userProfileControllers = {
   deleteAll,
 };
 
+const postControllers = {
+  createPost
+};
+
 const controllers = {
   authControllers,
   userControllers,
   userProfileControllers,
+  postControllers,
 };
 
 module.exports = controllers;
